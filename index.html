@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrackMate: Stay Connected, Stay Protected</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+      .logo {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 100;
+        width: 200px;
+        height: 100px;
+        transition: transform 0.3s ease;
+      }
+      .logo:hover {
+        transform: scale(1.05);
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      .content {
+        position: absolute;
+        top: 15%;
+        width: 100%;
+        text-align: center;
+        color: #004d40;
+      }
+      .title {
+        font-size: 3em;
+        font-weight: bold;
+        background: linear-gradient(90deg, #00796b, #004d40);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5),
+          0 0 25px rgba(0, 121, 107, 0.5);
+        animation: fadeInBounce 4s forwards;
+      }
+      @keyframes fadeInBounce {
+        0% {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        60% {
+          opacity: 1;
+          transform: translateY(10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .options-section {
+        display: none;
+        animation: fadeIn 2s forwards;
+        color: #00695c;
+        text-align: center;
+        margin-top: 20px;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .features {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+      }
+      .feature-box {
+        background: linear-gradient(135deg, #00796b, #004d40);
+        color: #ffffff;
+        padding: 20px;
+        width: 250px;
+        height: 200px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+      }
+      .feature-box:hover {
+        transform: scale(1.05) rotate(2deg);
+        box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.7);
+      }
+      .feature-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .feature-content {
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
+      .feature-icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-autfJG1iDABcmmmvUen39Sz5yvAbwJ.png"
+      alt="TrackMate Logo"
+      class="logo"
+    />
+
+    <div id="map"></div>
+
+    <div class="content">
+      <div class="title" id="titleSection">
+        TrackMate: Stay Connected, Stay Protected
+      </div>
+      <div class="options-section" id="optionsSection">
+        <div class="features">
+          <a
+            href="victims.html"
+            class="feature-box"
+            style="text-decoration: none; color: white"
+          >
+            <div class="feature-icon"><i class="fas fa-user-injured"></i></div>
+            <div class="feature-title">Victims</div>
+            <div class="feature-content">Access Assistance</div>
+          </a>
+
+          <a
+            href="login_signup.html"
+            class="feature-box"
+            style="text-decoration: none; color: white"
+          >
+            <div class="feature-icon">
+              <i class="fas fa-hand-holding-heart"></i>
+            </div>
+            <div class="feature-title">Volunteers</div>
+            <div class="feature-content">Login to Help</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      const map = L.map("map", {
+        zoomControl: false,
+      }).setView([20, 0], 2);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      setTimeout(() => {
+        document.getElementById("titleSection").style.display = "none";
+        const optionsSection = document.getElementById("optionsSection");
+        optionsSection.style.display = "block";
+      }, 4000);
+
+      function showLoginDialog() {
+        document.getElementById("loginDialog").style.display = "block";
+      }
+
+      function hideLoginDialog() {
+        document.getElementById("loginDialog").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

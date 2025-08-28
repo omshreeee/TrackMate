@@ -1,0 +1,163 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    text-align: center;    
+    background-color:whitesmoke;
+}
+
+.logo-container {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 7%; /* Ensure container width */
+    aspect-ratio: 1 / 1; /* Make the container a perfect square */
+    border-radius: 50%; /* Make the container circular */
+    overflow: hidden; /* Ensure content doesn't overflow */
+    display: flex; /* Center the image inside */
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-width: 100%; /* Make the image fill the container */
+    height: 100%; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensure the image scales proportionally */
+    border-radius: 50%; /* Ensures the image takes a circular shape */
+}
+
+.back-button {
+    position: absolute;
+    padding: 1% 1%;    
+    border-radius: 1%;
+    top: 5%;
+    left: 15%;
+    margin-left: 2%;
+    background-color: #007bff;
+    text-decoration: none;
+    text-align: center;
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    color: white; /* White text */
+    cursor: pointer;
+}
+
+p{
+    margin-bottom: 2%;
+}
+
+.filter-container {
+    margin-top: 2%;
+}
+
+.btnAll, .btnvictim, .btnfood, .btnshelter, .btnmedical {
+    position: relative;
+    padding: 1% 1.5%;   
+    margin: 1%; /* Add spacing between buttons */
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    color: white; /* White text */
+    cursor: pointer;
+}
+
+.add {
+    position: absolute;
+    top: 5%; /* Adjust the distance from the top */
+    right: 5%; /* Adjust the distance from the right */
+    padding: 10px 20px; /* Adjust padding for button size */
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    background-color: orange; /* Orange background */
+    color: white; /* White text */
+    cursor: pointer;
+    margin-bottom:4%;
+}
+
+.remove{
+    position: absolute;
+    margin-top:4%;
+    top: 5%; /* Adjust the distance from the top */
+    right: 5%; /* Adjust the distance from the right */
+    padding: 10px 20px; /* Adjust padding for button size */
+    font-size: 16px; /* Adjust font size */
+    font-weight: bold;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    background-color: orange; /* Orange background */
+    color: white; /* White text */
+    cursor: pointer;
+}
+
+.btnAll {
+    background-color: #007bff; /* Blue */
+}
+
+.btnvictim {
+    background-color: #28a745; /* Green */
+}
+
+.btnfood {
+    background-color: #ffc107; /* Yellow */
+    color: black;
+}
+
+.btnshelter {
+    background-color: #dc3545; /* Red */
+}
+
+.btnmedical {
+    background-color: #17a2b8; /* Teal */
+}
+
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    width: 300px;
+    max-width: 100%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trackmate</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f4f4f4;
+        background-image: url("https://developers.arcgis.com/documentation/static/display-a-map-b4974c7cfef498eb43e99ab60191cbaf.png");
+      }
+
+      #location-form {
+        max-width: 400px;
+        width: 100%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+      }
+
+      input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: inline-block;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        display: inline-block;
+        box-sizing: border-box;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="location-form">
+      <h1>VICTIMS</h1>
+
+      <form id="send-location">
+        <label for="location">Your Location:</label>
+        <input type="text" id="location" readonly />
+
+        <button type="button" onclick="getCurrentLocation()">
+          Get Current Location
+        </button>
+        <button type="button" onclick="sendLocation()">Send Location</button>
+      </form>
+    </div>
+
+    <script>
+      function getCurrentLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function (position) {
+              var latitude = position.coords.latitude;
+              var longitude = position.coords.longitude;
+              document.getElementById("location").value =
+                latitude + ", " + longitude;
+            },
+            function (error) {
+              console.error("Error getting location: " + error.message);
+            }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+        }
+      }
+
+      function sendLocation() {
+        var locationInput = document.getElementById("location").value;
+
+        if (!locationInput) {
+          alert("Please get your location first!");
+          return;
+        }
+
+        fetch("http://localhost:8000/api/send-location", {
+          // Updated correct URL
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ location: locationInput }),
+        })
+          .then((response) => response.json()) // Ensure proper JSON parsing
+          .then((data) => {
+            alert(data.message); // Display server response
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function sendLocationToUDP() {
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser.");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const locationData = { latitude, longitude };
+
+            // Send via UDP using Fetch
+            fetch("http://localhost:8000/send-udp-location", {
+              // Change to your server
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(locationData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                alert("📍 Location sent successfully!");
+                console.log("Response:", data);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("⚠️ Could not send location.");
+              });
+          },
+          (error) => {
+            alert("Unable to retrieve location.");
+            console.error(error);
+          }
+        );
+      }
+    </script>
+  </body>
+</html>

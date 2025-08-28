@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Volunteers</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="/css/volunteer.css" />
+    <style>
+      #map {
+        height: 500px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html">
+      <div class="logo-container">
+        <img src="images/logo.png" alt="TrackMate Logo" class="logo" />
+      </div>
+    </a>
+
+    <h1>Volunteer Section</h1>
+    <a href="index.html" class="back-button">Back to Home</a>
+    <p>Please use the filter as required.</p>
+
+    <div id="filter-container" class="filter-container">
+      <button class="btnAll" onclick="filterSelection('all')">Show all</button>
+      <button class="btnvictim" onclick="filterSelection('victims')">
+        Victims
+      </button>
+      <button class="btnfood" onclick="filterSelection('food')">Food</button>
+      <button class="btnshelter" onclick="filterSelection('shelter')">
+        Shelter
+      </button>
+      <button class="btnmedical" onclick="filterSelection('medical')">
+        Medical
+      </button>
+      <!--
+        <div class="reload-container">
+            <label for="reload-interval">Reload page every</label>
+            <select id="reload-interval" class="reload-select">
+                <option value=""></option>
+                <option value="1">1 min</option>
+                <option value="2">2 mins</option>
+                <option value="5">5 mins</option>
+                <option value="10">10 mins</option>
+            </select>
+        </div>-->
+
+      <button class="add" onclick="openAddModal()">Add location</button>
+      <button class="remove" onclick="startRemoveMode()">
+        Remove location
+      </button>
+    </div>
+
+    <div id="map"></div>
+
+    <div id="addModal" class="modal">
+      <div class="modal-header">
+        <span>Add Location</span>
+        <button class="close-btn" onclick="closeAddModal()">X</button>
+      </div>
+      <form id="addLocationForm">
+        <fieldset>
+          <legend>Select Categories:</legend>
+          <label
+            ><input type="checkbox" id="category-victim" value="Victim" />
+            Victim</label
+          ><br />
+          <label
+            ><input type="checkbox" id="category-food" value="Food" />
+            Food</label
+          ><br />
+          <label
+            ><input type="checkbox" id="category-shelter" value="Shelter" />
+            Shelter</label
+          ><br />
+          <label
+            ><input type="checkbox" id="category-medical" value="Medical" />
+            Medical</label
+          >
+        </fieldset>
+        <br />
+
+        <fieldset>
+          <legend>Select Location:</legend>
+          <label for="latitude">Latitude:</label>
+          <input type="text" id="latitude" placeholder="Latitude" /><br /><br />
+          <label for="longitude">Longitude:</label>
+          <input
+            type="text"
+            id="longitude"
+            placeholder="Longitude"
+          /><br /><br />
+          <div class="modal-actions">
+            <button class="choose-map-btn" onclick="chooseLocationOnMap()">
+              Choose on Map</button
+            ><br /><br />
+            <button type="submit">Submit</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div id="backdrop" class="backdrop" onclick="closeAddModal()"></div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      type="module"
+    ></script>
+    <script src="js\volunteer.js" type="module" defer></script>
+  </body>
+</html>

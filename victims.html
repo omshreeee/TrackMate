@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrackMate: Victim Assistance</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+      .logo {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        width: 50px;
+        height: 50px;
+        transition: transform 0.3s ease;
+      }
+      .logo:hover {
+        transform: scale(1.05);
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 80%;
+        width: 400px;
+      }
+      h1 {
+        color: #004d40;
+        margin-bottom: 20px;
+      }
+      .assistance-options {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .assistance-button {
+        background: linear-gradient(135deg, #00796b, #004d40);
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        font-size: 16px;
+      }
+      .assistance-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .back-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #004d40;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-autfJG1iDABcmmmvUen39Sz5yvAbwJ.png"
+      alt="TrackMate Logo"
+      class="logo"
+    />
+
+    <div id="map"></div>
+
+    <div class="content">
+      <a href="index.html" class="back-button">Back</a>
+      <h1>Victim Assistance</h1>
+      <div class="assistance-options">
+        <button class="assistance-button" onclick="sendLocationViaEmail()">
+          <i class="fas fa-envelope"></i> Send Location via Email
+        </button>
+        <button class="assistance-button" onclick="sendLocationViaSMS()">
+          <i class="fas fa-sms"></i> Send Location via SMS
+        </button>
+        <!-- New UDP button -->
+       
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      const map = L.map("map", {
+        zoomControl: false,
+      }).setView([20, 0], 2);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      function sendLocationViaEmail() {
+        window.location.href = "email.html";
+
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser.");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const ngoContact = "999-999-9999"; // Replace with actual NGO contact if needed
+
+            fetch("http://localhost:4000/api/sendLocation", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ latitude, longitude, ngoContact }),
+            })
+              .then((response) => response.json())
+              .then((data) => alert(data.message))
+              .catch((error) => console.error("Error:", error));
+          },
+          (error) => {
+            alert("Unable to retrieve location.");
+            console.error(error);
+          }
+        );
+      }
+
+      function sendLocationViaSMS() {
+        alert("Your location will be sent via SMS.");
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser.");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            fetch("http://localhost:4000/send-sms", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ latitude, longitude }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  alert("📩 SMS Sent Successfully!");
+                } else {
+                  alert("⚠️ Failed to send SMS.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("⚠️ Could not connect to server.");
+              });
+          },
+          (error) => {
+            alert("Unable to retrieve location.");
+            console.error(error);
+          }
+        );
+      }
+
+      // New function to send location via UDP
+      /*function sendLocationToUDP() {
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser.");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const locationData = { latitude, longitude };
+
+            fetch("http://localhost:8000/send-udp-location", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(locationData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                alert("📍 Location sent via UDP successfully!");
+                console.log("Response:", data);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("⚠️ Could not send location via UDP.");
+              });
+          },
+          (error) => {
+            alert("Unable to retrieve location.");
+            console.error(error);
+          }
+        );
+      }*/
+    </script>
+  </body>
+</html>
